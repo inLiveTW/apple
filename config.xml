@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.g0v.live" version="0.3.19" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>inLiveTW</name>
+    <description>
+    </description>
+    <author email="yutin@inlive.tw" href="http://inlive.tw">
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+</widget>
