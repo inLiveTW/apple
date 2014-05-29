@@ -158,12 +158,84 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('PushService', function () {
+.factory('User', function () {
+  return {
+    login: function (username, password, cb) {
+      Parse.User.logIn(username, password, {
+        success: function(user) {
+          console.log(user);
+          cb && cb(true, user);
+        },
+        error: function(user, error) {
+          if ( error && error.code=='101' ) {
+            cb && cb(false);
+          } else {
+            cb && cb();
+          }
+        }
+      });
+    },
+    current: function (cb) {
+      cb && cb(Parse.User.current());
+    },
+    logout: function () {
+      Parse.User.logOut();
+    }
+  }
+})
+
+.factory('Push', function (User) {
+  return {
+    send: function (message, cb) {
+      User.current(function (user) {
+        if (user) {
+          postParse('push', {
+            'type': 'reporter',
+            'name': user.get('name'),
+            'title': user.get('name'),
+            'message': message,
+            'start': new Date(),
+          }, function (err) {
+            cb && cb(err);
+          });
+        }else{
+          cb && cb(true);
+        }
+      });
+    }
+  }
+})
+
+.factory('Notify', function ($http) {
   var storage = window.localStorage;
-  var pushSync;
   var updateTimer;
   var first = true;
-  return pushSync = {
+  var cache = null;
+  return {
+    fetch: function (cb) {
+      if ( cache !== null ) {
+        cb && cb(null, cache);
+      }else{
+        this.reload(cb);
+      }
+    },
+    reload: function (cb) {
+      cache = [];
+      $http({
+        'method': 'GET',
+        'url': 'https://livelink.firebaseio.com/notify/.json',
+        'cache': false
+      })
+      .success( function (data) {
+        if (typeof data === 'object') {
+          cache = data;
+        }
+        cb && cb(null, cache);
+      })
+      .error( function (data, status) {
+        cb && cb(status || true, cache);
+      });
+    },
     getLive: function(){
       return storage['push_live']==="false" ? false : true;
     },
@@ -178,19 +250,19 @@ angular.module('starter.services', [])
     },
     setLive: function(val){
       storage['push_live'] = (val==false) ? false : true;
-      pushSync.updateToServer();
+      this.updateToServer();
     },
     setEvent: function(val){
       storage['push_event'] = (val==false) ? false : true;
-      pushSync.updateToServer();
+      this.updateToServer();
     },
     setMessage: function(val){
       storage['push_message'] = (val==false) ? false : true;
-      pushSync.updateToServer();
+      this.updateToServer();
     },
     setMessage: function(val){
       storage['push_reporter'] = (val==false) ? false : true;
-      pushSync.updateToServer();
+      this.updateToServer();
     },
     updateToServer: function()
     {
