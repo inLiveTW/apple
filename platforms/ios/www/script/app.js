@@ -46,7 +46,7 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
       }
     })
     .state('tab.event', {
-      url: '/event',
+      url: '/event/{group}',
       views: {
         'event-tab': {
           templateUrl: 'template/event.html',
@@ -114,6 +114,14 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
 
 })
 
+.config( [
+    '$compileProvider',
+    function( $compileProvider )
+    {   
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
+    }
+])
+
 .filter('toDateTime', function(){
   return function(str){
     var time = new Date(str);
@@ -160,6 +168,11 @@ angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
 })
 
 .run(function($rootScope){
+  if ( typeof cordova === "undefined" && chrome && chrome.browserAction && localStorage ) {
+    localStorage['push_open'] = 0;
+    chrome.browserAction.setBadgeText({text: ''});
+  }
+
   $rootScope.open = function(url){
     window.open(url, '_blank');
   };

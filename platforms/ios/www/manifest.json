@@ -1,10 +1,10 @@
 {
-  "name": "LiveTW",
+  "name": "inLiveTW",
   "manifest_version": 2,
-  "version": "0.4.3",
+  "version": "0.4.19",
   "browser_action": {
     "default_icon": "image/icon/LiveTW.png",
-    "default_title": "LiveTW",
+    "default_title": "inLiveTW",
     "default_popup": "index.html"
   },
   "icons": {
@@ -19,12 +19,5 @@
     "pushMessaging",
     "notifications",
     "storage"
-  ],
-  "content_scripts": [
-    {
-      "matches": ["*://www.facebook.com/events/*"],
-      "css": ["content/content.css"],
-      "js": ["plugin/jquery.js", "plugin/parse.js", "content/content.js"]
-    }
   ]
 }

@@ -20,6 +20,20 @@ module.exports = [
         "clobbers": [
             "window.open"
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.console/www/console-via-logger.js",
+        "id": "org.apache.cordova.console.console",
+        "clobbers": [
+            "console"
+        ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.console/www/logger.js",
+        "id": "org.apache.cordova.console.logger",
+        "clobbers": [
+            "cordova.logger"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -27,7 +41,8 @@ module.exports.metadata =
 {
     "com.phonegap.plugins.PushPlugin": "2.2.0",
     "org.apache.cordova.device": "0.2.9",
-    "org.apache.cordova.inappbrowser": "0.4.0"
+    "org.apache.cordova.inappbrowser": "0.5.1-dev",
+    "org.apache.cordova.console": "0.2.9"
 }
 // BOTTOM OF METADATA
 });
